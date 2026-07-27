@@ -3,6 +3,7 @@ Practical focuses on mutual exclusion and locks
 
 # name        student num
 Bianca        25144465
+Lilly         25253990
 
 # How to run code
 
