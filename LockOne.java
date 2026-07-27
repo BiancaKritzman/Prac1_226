@@ -4,24 +4,20 @@ class LockOne {
     private boolean[] flag = new boolean[2];
 
     public void lock(){
-        for(int i = 0; i < 2; i++){
-            if(flag[i]){
-                while(flag[i]){
-                //do nothing
-                }
-            }
+        int i = (int) Thread.currentThread().getId();
+        int j = 1 - i;
+        flag[i] = true;
+        
+        while(flag[j]){
+            //do nothing
         }
     }
 
     public void unlock(){
-        int i = 0;
-        int j = 1;
+        int i = (int) Thread.currentThread().getId();
+    
         if(flag[i]){
             flag[i] = false;
-        }
-
-        if(flag[j]){
-            flag[j] = false;
         }
         
     }
