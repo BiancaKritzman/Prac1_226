@@ -2,4 +2,4 @@
 Practical focuses on mutual exclusion and locks
 
 # name        student num
-Bianca        Kritzman
+Bianca        25144465
