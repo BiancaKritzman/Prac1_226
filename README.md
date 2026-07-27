@@ -4,14 +4,14 @@ Practical focuses on mutual exclusion and locks
 # name        student num
 Bianca        25144465
 
+# How to run code
+
+
+
 
 # Explain the purpose of mutual exclusion
 
 To prevent 2 threads from entering the critical section at the same time and causing error in the result
-
-# Implement software locking algorithms
-
-
 
 # Demonstrate the behaviour of concurrent threads
 
