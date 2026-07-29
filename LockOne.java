@@ -1,10 +1,14 @@
 //LockOne
+interface Lock {
+    void lock(int ID);
+    void unlock();
+}
 
-class LockOne {
+public class LockOne implements Lock {
     private boolean[] flag = new boolean[2];
 
-    public void lock(){
-        int i = (int) Thread.currentThread().threadId();
+    public void lock(int i){
+        i = (int) Thread.currentThread().threadId();
         int j = 1 - i;
         flag[i] = true;
         
