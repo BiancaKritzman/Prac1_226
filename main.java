@@ -79,7 +79,7 @@ public class main {
             t3.join();
         }
 
-        System.out.println("\nBoth Threads were not able to execute because they couldn't be freed at the victim.\n");
+        System.out.println("\nBoth Threads were not able to execute because they couldn't be freed as the victim.\n");
 
     }
 }
