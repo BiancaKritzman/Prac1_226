@@ -8,7 +8,6 @@ public class main {
         LockOne l2 = new LockOne();
         l1.lock();
 
-<<<<<<< HEAD
         l2.lock(); //can't happen because l1 is locked
 
         if(l1.flag[0] && l2.flag[1]){ {
@@ -18,10 +17,9 @@ public class main {
         }
 
         System.out.println("Thread 1 is locked and thread 2 is waiting for it to unlock");
-=======
+
         //LockTwo testing
         LockTwo lock = new LockTwo();
->>>>>>> fdb793d5a7f1667424106edc515cb2e151e41e0e
 
         Thread t0 = new Thread(() -> {
             System.out.println("Thread 0 attempts to acquire lock");
