@@ -111,22 +111,22 @@ public class main {
         System.out.println("Both threads finished execution.");
 
         //LockTwo testing
-    //     LockTwo lock = new LockTwo();
+        LockTwo lock = new LockTwo();
 
-    //     Thread t0 = new Thread(() -> {
-    //         System.out.println("Thread 0 attempts to acquire lock");
-    //         lock.lock(0);
-    //         lock.unlock();
-    //     });
+        Thread t0 = new Thread(() -> {
+            System.out.println("Thread 0 attempts to acquire lock");
+            lock.lock(0);
+            lock.unlock();
+        });
 
-    //     //t1 ends up waiting forever
-    //     Thread t1 = new Thread(() -> {
-    //         System.out.println("Thread 1 attempts to acquire lock");
-    //         lock.lock(1);
-    //         lock.unlock();
-    //     });
+        //t1 ends up waiting forever
+        Thread t1 = new Thread(() -> {
+            System.out.println("Thread 1 attempts to acquire lock");
+            lock.lock(1);
+            lock.unlock();
+        });
 
-    //     t0.start(); //.start() calls the Thread's run() method in parallel
-    //     t1.start();
+        t0.start(); //.start() calls the Thread's run() method in parallel
+        t1.start();
     }
 }
