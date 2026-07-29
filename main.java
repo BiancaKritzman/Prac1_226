@@ -27,13 +27,14 @@ public class main {
             lock.unlock();
         });
 
+        //t1 ends up waiting forever
         Thread t1 = new Thread(() -> {
             System.out.println("Thread 1 attempts to acquire lock");
             lock.lock(1);
             lock.unlock();
         });
 
-        t0.start();
+        t0.start(); //.start() calls the Thread's run() method in parallel
         t1.start();
     }
 }
