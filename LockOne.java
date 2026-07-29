@@ -7,10 +7,12 @@ interface Lock {
 public class LockOne implements Lock {
     private boolean[] flag = new boolean[2];
 
+    private int lockID;
+
     public void lock(int i){
-        i = (int) Thread.currentThread().threadId();
+        lockID = i;
         int j = 1 - i;
-        flag[i] = true;
+        flag[lockID] = true;
         
         while(flag[j]){
             //do nothing
@@ -18,7 +20,7 @@ public class LockOne implements Lock {
     }
 
     public void unlock(){
-        int i = (int) Thread.currentThread().threadId();
+        int i = lockID;
     
         if(flag[i]){
             flag[i] = false;

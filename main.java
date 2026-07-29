@@ -2,117 +2,131 @@
 
 public class main {   
 
-    public static void main(String[] args) throws InterruptedException{
+    public static void main(String[] args) {
 
         //LockOne testing
 
         LockOne l1 = new LockOne();
-        LockOne l2 = new LockOne();
-        //int value = 0;
+        //private static int value = 0;
 
         //sequential
          Thread thread1 = new Thread(() -> {
             System.out.println("(LockOne) Thread 1 attempts to acquire lock");
-            l1.lock(1);
-            int value = 10;
+            l1.lock(0);
+            System.out.println("(LockOne) Thread 1 successfully inside critcal section ");
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // empty
+            }            
             l1.unlock();
-            System.out.println("(LockOne) Thread 1 successfully finished critcal section" + value);
-
+            System.out.println("(LockOne) Thread 1 released lock");
+            
         });
 
         Thread thread2 = new Thread(() -> {
             System.out.println("(LockOne) Thread 2 attempts to acquire lock");
-            l2.lock(2);
-            int value = 20;
-            l2.unlock();
-            System.out.println("(LockOne) Thread 2 succesfully finished critical section" + value);
+            l1.lock(1);
+            System.out.println("(LockOne) Thread 2 succesfully inside critical section ");
+       
+                    
+            try {
+                Thread.sleep(1000 + (int) (Math.random() * 2000));
+            } catch (InterruptedException e) {
+                // empty
+            }    
+            l1.unlock();
+            System.out.println("(LockOne) Thread 2 released lock");
+
 
         });
 
+        System.out.println("Starting threads sequentially...");
+        //sequential
         thread1.start();
 
-        if(thread1.flag == true){
-            System.out.println("(LockOne) thread1 running");
+        try {
+            thread1.join();
+        }
+        catch (InterruptedException e){
+            e.printStackTrace();
         }
 
-        //concurrent
+        thread2.start();
 
+        try{
+            thread2.join();
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
 
+        System.out.println("Both threads finished execution.");
+
+        Thread t1Concurrent = new Thread(() -> {
+            System.out.println("(LockOne) Thread 1 attempts to acquire lock");
+            l1.lock(0);
+            System.out.println("(LockOne) Thread 1 successfully inside critcal section ");
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // empty
+            }            
+            l1.unlock();
+            System.out.println("(LockOne) Thread 1 released lock");
+            
+        });
+
+        Thread t2Concurrent = new Thread(() -> {
+            System.out.println("(LockOne) Thread 2 attempts to acquire lock");
+            l1.lock(1);
+            System.out.println("(LockOne) Thread 2 succesfully inside critical section ");
        
-        // l1.lock();
+                    
+            try {
+                Thread.sleep(1000 + (int) (Math.random() * 2000));
+            } catch (InterruptedException e) {
+                // empty
+            }    
+            l1.unlock();
+            System.out.println("(LockOne) Thread 2 released lock");
 
-        // l2.lock(); //can't happen because l1 is locked
 
-        // if(l1.flag[0] && l2.flag[1]){ {
-        //     System.out.println("Both threads are locked");
-        // } else {
-        //     System.out.println("One of the threads is locked");
-        // }
+        });
+        
+        System.out.println("Starting threads concurrently...");
+        //concurrent - causes deadlock
+        t1Concurrent.start();
+        t2Concurrent.start();
 
-        // System.out.println("Thread 1 is locked and thread 2 is waiting for it to unlock");
+        try {
+            t1Concurrent.join();
+            t2Concurrent.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Both threads finished execution.");
 
         //LockTwo testing
-        //Concurrent 
-        System.out.println("LockTwo demonstration with concurrent Threads:\n");
+    //     LockTwo lock = new LockTwo();
 
-        LockTwo concurrentLock = new LockTwo();
+    //     Thread t0 = new Thread(() -> {
+    //         System.out.println("Thread 0 attempts to acquire lock");
+    //         lock.lock(0);
+    //         lock.unlock();
+    //     });
 
-        Thread t0 = new Thread(() -> {
-            System.out.println("Thread 0 attempts to acquire lock");
-            concurrentLock.lock(0);
-            concurrentLock.unlock(0);
-        });
+    //     //t1 ends up waiting forever
+    //     Thread t1 = new Thread(() -> {
+    //         System.out.println("Thread 1 attempts to acquire lock");
+    //         lock.lock(1);
+    //         lock.unlock();
+    //     });
 
-        Thread t1 = new Thread(() -> {
-            System.out.println("Thread 1 attempts to acquire lock");
-            concurrentLock.lock(1);
-            concurrentLock.unlock(1);
-        });
-
-        t0.start(); //.start() calls the Thread's run() method in parallel
-        t1.start();
-
-        t0.join(); //to wait for t0 and t1 to finish the demonstration before continuing
-        t1.join();
-
-        System.out.println("\nBoth Threads completed successfully!!\n");
-
-        //Sequential
-        System.out.println("LockTwo demonstration with sequential Threads:\n");
-
-        LockTwo sequentialLock = new LockTwo();
-
-        Thread t2 = new Thread(() -> {
-            System.out.println("Thread 0 attempts to acquire lock");
-            sequentialLock.lock(0);
-            sequentialLock.unlock(0);
-        });
-
-        t2.start();
-        Thread.sleep(2000); //2s to run
-
-        if(t2.isAlive()){ //check if its stuck
-            System.out.println("Thread 0 waits forever");
-            t2.interrupt(); //sets an interrupt flag so we can stop the while loop and move on
-            t2.join(); //wait to finish
-        }
-
-        Thread t3 = new Thread(() -> {
-            System.out.println("Thread 1 attempts to acquire lock");
-            sequentialLock.lock(1);
-            sequentialLock.unlock(1);
-        });
-
-        t3.start();
-        Thread.sleep(2000);
-
-        if(t3.isAlive()){
-            System.out.println("Thread 1 waits forever");
-            t3.interrupt(); 
-            t3.join();
-        }
-
-        System.out.println("\nBoth Threads were not able to execute because they couldn't be freed as the victim.\n");
-
+    //     t0.start(); //.start() calls the Thread's run() method in parallel
+    //     t1.start();
     }
 }
