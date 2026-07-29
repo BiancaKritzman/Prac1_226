@@ -20,7 +20,7 @@ public class main {
             } catch (InterruptedException e) {
                 // empty
             }            
-            l1.unlock();
+            l1.unlock(0);
             System.out.println("(LockOne) Thread 1 released lock");
             
         });
@@ -36,7 +36,7 @@ public class main {
             } catch (InterruptedException e) {
                 // empty
             }    
-            l1.unlock();
+            l1.unlock(1);
             System.out.println("(LockOne) Thread 2 released lock");
 
 
@@ -74,7 +74,7 @@ public class main {
             } catch (InterruptedException e) {
                 // empty
             }            
-            l1.unlock();
+            l1.unlock(0);
             System.out.println("(LockOne) Thread 1 released lock");
             
         });
@@ -90,7 +90,7 @@ public class main {
             } catch (InterruptedException e) {
                 // empty
             }    
-            l1.unlock();
+            l1.unlock(1);
             System.out.println("(LockOne) Thread 2 released lock");
 
 
@@ -98,6 +98,9 @@ public class main {
         
         System.out.println("Starting threads concurrently...");
         //concurrent - causes deadlock
+        //thread 1 unlock thread 2 flag by mistake
+        //thread 1's flag was never set back to false
+
         t1Concurrent.start();
         t2Concurrent.start();
 
@@ -110,20 +113,25 @@ public class main {
 
         System.out.println("Both threads finished execution.");
 
+        // Thread 1 acquires lock: Thread 1 sets lockID = 0 and flag[0] = true. It sees flag[1] is false, so it enters the critical section and goes to sleep.
+        // Thread 2 arrives: While Thread 1 is sleeping, Thread 2 calls lock(1). It overwrites the class field lockID = 1 and sets flag[1] = true. It checks flag[0] (which is true), so Thread 2 starts spinning in its while loop.
+        // Thread 1 releases lock: Thread 1 wakes up and calls unlock(). Inside unlock(), it reads int i = lockID;. Because Thread 2 overwrote lockID with 1, Thread 1 executes flag[1] = false!
+        // The deadlock: Thread 1 finishes its run, thinking it cleared its own flag. But flag[0] is still true. Thread 2 is stuck spinning on while(flag[0]) forever because nobody will ever set flag[0] back to false
+
         //LockTwo testing
         LockTwo lock = new LockTwo();
 
         Thread t0 = new Thread(() -> {
             System.out.println("Thread 0 attempts to acquire lock");
             lock.lock(0);
-            lock.unlock();
+            lock.unlock(0);
         });
 
         //t1 ends up waiting forever
         Thread t1 = new Thread(() -> {
             System.out.println("Thread 1 attempts to acquire lock");
             lock.lock(1);
-            lock.unlock();
+            lock.unlock(1);
         });
 
         t0.start(); //.start() calls the Thread's run() method in parallel

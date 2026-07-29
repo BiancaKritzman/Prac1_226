@@ -1,26 +1,22 @@
 //LockOne
-interface Lock {
+interface Lock1 {
     void lock(int ID);
-    void unlock();
+    void unlock(int ID);
 }
 
-public class LockOne implements Lock {
+public class LockOne implements Lock1 {
     private boolean[] flag = new boolean[2];
 
-    private int lockID;
-
     public void lock(int i){
-        lockID = i;
         int j = 1 - i;
-        flag[lockID] = true;
+        flag[i] = true;
         
         while(flag[j]){
             //do nothing
         }
     }
 
-    public void unlock(){
-        int i = lockID;
+    public void unlock(int i){
     
         if(flag[i]){
             flag[i] = false;
