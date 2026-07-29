@@ -100,6 +100,7 @@ public class main {
         //concurrent - causes deadlock
         //thread 1 unlock thread 2 flag by mistake
         //thread 1's flag was never set back to false
+        //thread 2 changes the thread ID meaning thread 2 can never go back to false (deadlock)
 
         t1Concurrent.start();
         t2Concurrent.start();

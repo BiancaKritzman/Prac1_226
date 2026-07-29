@@ -7,7 +7,8 @@ Lillian       25253990
 
 # How to run code
 
-
+javac (all .java files)
+java main
 
 
 # Explain the purpose of mutual exclusion
