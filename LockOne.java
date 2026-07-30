@@ -1,10 +1,4 @@
-//LockOne
-interface Lock1 {
-    void lock(int ID);
-    void unlock(int ID);
-}
-
-public class LockOne implements Lock1 {
+public class LockOne implements Lock {
     private boolean[] flag = new boolean[2];
 
     public void lock(int i){

@@ -185,5 +185,79 @@ public class main {
         }
 
         System.out.println("\nBoth Threads were not able to execute because they couldn't be freed at the victim.\n");
+    
+        
+
+
+
+        //Peterson's Algorithm testing
+        //Concurrent - LockOne's deadlock
+        System.out.println("\nPeterson's Algorithm with concurrent Threads:\n");
+
+        Peterson concurrentPeterson = new Peterson();
+
+        Thread p0 = new Thread(() -> {
+            System.out.println("(Peterson) Thread 0 attempts to acquire lock");
+            concurrentPeterson.lock(0);
+            System.out.println("(Peterson) Thread 0 inside critical section");
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {}
+
+            concurrentPeterson.unlock(0);
+            System.out.println("(Peterson) Thread 0 released lock");
+        });
+
+        Thread p1 = new Thread(() -> {
+            System.out.println("(Peterson) Thread 1 attempts to acquire lock");
+            concurrentPeterson.lock(1);
+            System.out.println("(Peterson) Thread 1 inside critical section");
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {}
+
+            concurrentPeterson.unlock(1);
+            System.out.println("(Peterson) Thread 1 released lock");
+        });
+
+        p0.start();
+        p1.start();
+
+        p0.join();
+        p1.join();
+
+        System.out.println("\nBoth Threads completed successfully with concurrent start!! (unlike LockOne)\n");
+
+        //Sequential - LockTwo's deadlock
+        System.out.println("Peterson with sequential Threads:\n");
+
+        Peterson sequentialPeterson = new Peterson();
+
+        Thread p2 = new Thread(() -> {
+            System.out.println("(Peterson) Thread 0 attempts to acquire lock");
+            sequentialPeterson.lock(0);
+            System.out.println("(Peterson) Thread 0 inside critical section");
+            sequentialPeterson.unlock(0);
+            System.out.println("(Peterson) Thread 0 released lock");
+        });
+
+        p2.start();
+        p2.join();
+
+        Thread p3 = new Thread(() -> {
+            System.out.println("(Peterson) Thread 1 attempts to acquire lock");
+            sequentialPeterson.lock(1);
+            System.out.println("(Peterson) Thread 1 inside critical section");
+            sequentialPeterson.unlock(1);
+            System.out.println("(Peterson) Thread 1 released lock");
+        });
+
+        p3.start();
+        p3.join();
+
+        System.out.println("\nBoth Threads completed successfully with sequential start!! (unlike LockTwo)\n");
+    
     }
 }

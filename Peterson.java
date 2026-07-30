@@ -1,12 +1,7 @@
-interface Lock {
-    void lock(int id);
-    void unlock(int id);
-}
-
 public class Peterson implements Lock {
     // thread-local index, 0 or 1
-    private boolean[] flag = new boolean[2];
-    private int victim;
+    private volatile boolean[] flag = new boolean[2];
+    private volatile int victim;
 
     public void lock(int id) {
         int i = id;

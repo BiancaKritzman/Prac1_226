@@ -1,8 +1,3 @@
-interface Lock {
-    void lock(int ID);
-    void unlock(int ID);
-}
-
 public class LockTwo implements Lock{
     private volatile int victim = -1; //decides who waits
     public void lock(int ID){
