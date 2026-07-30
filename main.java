@@ -67,7 +67,6 @@ public class main {
         Thread t1Concurrent = new Thread(() -> {
             System.out.println("(LockOne) Thread 1 attempts to acquire lock");
             l1.lock(0);
-            System.out.println("(LockOne) Thread 1 successfully inside critcal section ");
             
             try {
                 Thread.sleep(1000);
@@ -88,7 +87,7 @@ public class main {
                 // empty
             }    
             l1.unlock(1);
-            
+
         });
         
         System.out.println("Starting threads concurrently...");
