@@ -75,25 +75,20 @@ public class main {
                 // empty
             }            
             l1.unlock(0);
-            System.out.println("(LockOne) Thread 1 released lock");
             
         });
 
         Thread t2Concurrent = new Thread(() -> {
             System.out.println("(LockOne) Thread 2 attempts to acquire lock");
-            l1.lock(1);
-            System.out.println("(LockOne) Thread 2 succesfully inside critical section ");
-       
+            l1.lock(1);       
                     
             try {
-                Thread.sleep(1000 + (int) (Math.random() * 2000));
+                Thread.sleep(1000 );
             } catch (InterruptedException e) {
                 // empty
             }    
             l1.unlock(1);
-            System.out.println("(LockOne) Thread 2 released lock");
-
-
+            
         });
         
         System.out.println("Starting threads concurrently...");
@@ -105,16 +100,24 @@ public class main {
         t1Concurrent.start();
         t2Concurrent.start();
 
-        t1Concurrent.join();
-        t2Concurrent.join();
+        Thread.sleep(2000);
 
-        // try {
-            
-        // } catch (InterruptedException e) {
-        //     e.printStackTrace();
-        // }
+        if(t1Concurrent.isAlive()){
+            System.out.println("Thread 1 waits forever");
+            t1Concurrent.interrupt(); 
+            t1Concurrent.join();
+        }
+
+         Thread.sleep(2000);
+
+        if(t2Concurrent.isAlive()){
+            System.out.println("Thread 1 waits forever");
+            t2Concurrent.interrupt(); 
+            t2Concurrent.join();
+        }
+    
         //add this code to add a Interrupt
-        System.out.println("\nBoth Threads were not able to execute thread2 changed the thread Id and now Thread1 will constantly be true\n");
+        System.out.println("\nBoth Threads were not able to execute Thread2 changed the thread ID and now Thread1 will constantly be true\n");
  
         // Thread 1 acquires lock: Thread 1 sets lockID = 0 and flag[0] = true. It sees flag[1] is false, so it enters the critical section and goes to sleep.
         // Thread 2 arrives: While Thread 1 is sleeping, Thread 2 calls lock(1). It overwrites the class field lockID = 1 and sets flag[1] = true. It checks flag[0] (which is true), so Thread 2 starts spinning in its while loop.
