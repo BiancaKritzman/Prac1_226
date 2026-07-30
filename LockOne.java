@@ -13,6 +13,10 @@ public class LockOne implements Lock1 {
         
         while(flag[j]){
             //do nothing
+            if (Thread.currentThread().isInterrupted()) {
+            System.out.println("Releasing Thread " + i + " from hanging"); 
+            return; //a way to get out of the loop and  continue the demo
+            }
         }
     }
 

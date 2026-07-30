@@ -2,7 +2,7 @@
 
 public class main {   
 
-    public static void main(String[] args) throws InterruptedException{
+    public static void main(String[] args) throws InterruptedException {
 
         //LockOne testing
 
@@ -32,7 +32,7 @@ public class main {
        
                     
             try {
-                Thread.sleep(1000 + (int) (Math.random() * 2000));
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 // empty
             }    
@@ -100,19 +100,22 @@ public class main {
         //concurrent - causes deadlock
         //thread 1 unlock thread 2 flag by mistake
         //thread 1's flag was never set back to false
+        //thread 2 changes the thread ID meaning thread 2 can never go back to false (deadlock)
 
         t1Concurrent.start();
         t2Concurrent.start();
 
-        try {
-            t1Concurrent.join();
-            t2Concurrent.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        t1Concurrent.join();
+        t2Concurrent.join();
 
-        System.out.println("Both threads finished execution.");
-
+        // try {
+            
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
+        //add this code to add a Interrupt
+        System.out.println("\nBoth Threads were not able to execute thread2 changed the thread Id and now Thread1 will constantly be true\n");
+ 
         // Thread 1 acquires lock: Thread 1 sets lockID = 0 and flag[0] = true. It sees flag[1] is false, so it enters the critical section and goes to sleep.
         // Thread 2 arrives: While Thread 1 is sleeping, Thread 2 calls lock(1). It overwrites the class field lockID = 1 and sets flag[1] = true. It checks flag[0] (which is true), so Thread 2 starts spinning in its while loop.
         // Thread 1 releases lock: Thread 1 wakes up and calls unlock(). Inside unlock(), it reads int i = lockID;. Because Thread 2 overwrote lockID with 1, Thread 1 executes flag[1] = false!
@@ -180,6 +183,5 @@ public class main {
         }
 
         System.out.println("\nBoth Threads were not able to execute because they couldn't be freed at the victim.\n");
-
     }
 }
